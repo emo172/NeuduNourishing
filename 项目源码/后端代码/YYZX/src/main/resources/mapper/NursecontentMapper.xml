@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.NursecontentMapper">
+
+    <!--通用查询映射结果-->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Nursecontent">
+        <id column="id" property="id"/>
+        <result column="serial_number" property="serialNumber"/>
+        <result column="nursing_name" property="nursingName"/>
+        <result column="service_price" property="servicePrice"/>
+        <result column="message" property="message"/>
+        <result column="status" property="status"/>
+        <result column="execution_cycle" property="executionCycle"/>
+        <result column="execution_times" property="executionTimes"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, serial_number, nursing_name, service_price, message, status,execution_cycle,execution_times,is_deleted
+    </sql>
+
+</mapper>

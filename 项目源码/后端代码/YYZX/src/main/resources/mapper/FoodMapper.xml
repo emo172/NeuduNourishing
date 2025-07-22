@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.FoodMapper">
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Food">
+        <id column="id" property="id"/>
+        <result column="food_name" property="foodName"/>
+        <result column="food_type" property="foodType"/>
+        <result column="price" property="price"/>
+        <result column="is_halal" property="isHalal"/>
+        <result column="food_img" property="foodImg"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,food_name,food_type,price,is_halal,food_img
+    </sql>
+
+</mapper>

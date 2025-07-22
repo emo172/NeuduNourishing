@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.BeddetailsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Beddetails">
+        <id column="id" property="id"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="bed_details" property="bedDetails"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="bed_id" property="bedId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, is_deleted ,start_date, end_date, bed_details, customer_id, bed_id
+    </sql>
+
+    <select id="selectBedDetailsVo" resultType="BedDetailsVo">
+        SELECT
+        b.id,
+        b.is_deleted,
+        b.start_date,
+        b.end_date,
+        b.bed_details,
+        b.customer_id,
+        b.bed_id,
+        c.customer_name,
+        c.customer_sex
+        FROM
+        beddetails b
+        LEFT JOIN customer c ON ( b.customer_id = c.id )
+        <where>
+            <if test="detailsDTO !=null and detailsDTO.customerName!=null and  detailsDTO.customerName!=''">
+                and c.customer_name like concat('%','${detailsDTO.customerName}','%')
+            </if>
+            <if test="detailsDTO!=null and detailsDTO.startDate!=null and detailsDTO.endDate!=null">
+                and b.start_date>=#{detailsDTO.startDate} and #{detailsDTO.endDate}>=b.start_date
+            </if>
+            and b.is_deleted=#{detailsDTO.isDeleted}
+        </where>
+        order by b.end_date desc
+    </select>
+
+</mapper>

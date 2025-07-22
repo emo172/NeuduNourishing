@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.BackdownMapper">
+
+    <!--通用查询映射结果-->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Backdown">
+        <id column="id" property="id"/>
+        <result column="remarks" property="remarks"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="retreattime" property="retreattime"/>
+        <result column="retreattype" property="retreattype"/>
+        <result column="retreatreason" property="retreatreason"/>
+        <result column="auditstatus" property="auditstatus"/>
+        <result column="auditperson" property="auditperson"/>
+        <result column="audittime" property="audittime"/>
+        <result column="bed_details" property="bedDetails"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, remarks, is_deleted, customer_id, retreattime, retreattype, retreatreason, auditstatus, auditperson, audittime, bed_details
+    </sql>
+
+    <!--通过当前登录护工查询对应客户信息-->
+    <select id="selectBackdownVo" resultType="BackdownVo">
+        SELECT DISTINCT
+        bdn.id,
+        bdn.remarks,
+        bdn.is_deleted,
+        bdn.customer_id,
+        bdn.retreattime,
+        bdn.retreattype,
+        bdn.retreatreason,
+        bdn.auditstatus,
+        bdn.auditperson,
+        bdn.audittime,
+        bdd.bed_details,
+        cs.checkin_date,
+        cs.bed_id,
+        cs.customer_name
+        FROM
+        backdown bdn,
+        USER u,
+        beddetails bdd,
+        customer cs
+        WHERE
+        cs.user_id = u.id
+        AND cs.id = bdn.customer_id
+        AND bdn.customer_id = bdd.customer_id
+        AND bdn.is_deleted = 0
+        <if test="userId != null and userId != ''">
+            AND u.id = #{userId}
+        </if>
+    </select>
+
+</mapper>

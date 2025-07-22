@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.NurserecordMapper">
+
+    <!--通用查询映射结果-->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Nurserecord">
+        <id column="id" property="id"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="item_id" property="itemId"/>
+        <result column="nursing_time" property="nursingTime"/>
+        <result column="nursing_content" property="nursingContent"/>
+        <result column="nursing_count" property="nursingCount"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, is_deleted, customer_id, item_id, nursing_time, nursing_content, nursing_count, user_id
+    </sql>
+
+    <select id="selectNurseRecordsVo" resultType="NurseRecordsVo">
+        SELECT nr.id,
+               nr.is_deleted,
+               nr.customer_id,
+               nr.item_id,
+               nr.nursing_time,
+               nr.nursing_content,
+               nr.nursing_count,
+               nr.user_id,
+               u.nickname,
+               u.phone_number,
+               nc.serial_number,
+               nc.nursing_name
+        FROM nurserecord nr
+                 JOIN
+             user u ON nr.user_id = u.id
+                 JOIN
+             nursecontent nc ON nr.item_id = nc.id
+        WHERE nr.is_deleted = 0
+          AND nr.customer_id = #{customerId}
+    </select>
+
+</mapper>

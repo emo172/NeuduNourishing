@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.BedMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Bed">
+        <id column="id" property="id"/>
+        <result column="room_no" property="roomNo"/>
+        <result column="bed_status" property="bedStatus"/>
+        <result column="remarks" property="remarks"/>
+        <result column="bed_no" property="bedNo"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, room_no, bed_status, remarks, bed_no
+    </sql>
+
+    <select id="selectBedCount" resultType="com.neusoft.yyzx.vo.CwsyBedVo">
+        SELECT
+                (SELECT COUNT(*) FROM bed) AS zcw,
+                (SELECT COUNT(*) FROM bed WHERE bed_status = 1) AS kx,
+                (SELECT COUNT(*) FROM bed WHERE bed_status = 2) AS yr,
+                (SELECT COUNT(*) FROM bed WHERE bed_status = 3) AS wc;
+    </select>
+</mapper>

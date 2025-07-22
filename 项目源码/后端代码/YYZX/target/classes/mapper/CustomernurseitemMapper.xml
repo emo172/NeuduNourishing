@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.CustomernurseitemMapper">
+    <!--通用查询映射结果-->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Customernurseitem">
+        <id column="id" property="id"/>
+        <result column="item_id" property="itemId"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="level_id" property="levelId"/>
+        <result column="nurse_number" property="nurseNumber"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="buy_time" property="buyTime"/>
+        <result column="maturity_time" property="maturityTime"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, item_id, customer_id, level_id, nurse_number, is_deleted, buy_time, maturity_time
+    </sql>
+    <select id="selectCustomerItemVo" resultType="CustomerNurseItemVo">
+        SELECT cni.id,
+               cni.item_id,
+               cni.customer_id,
+               cni.level_id,
+               cni.nurse_number,
+               cni.is_deleted,
+               cni.buy_time,
+               cni.maturity_time,
+               c.customer_name,
+               nc.serial_number,
+               nc.nursing_name,
+               nc.service_price
+        FROM customernurseitem cni
+                 JOIN customer c ON (cni.customer_id = c.id)
+                 JOIN nursecontent nc on (cni.item_id = nc.id)
+        WHERE cni.is_deleted = 0
+          and cni.customer_id = #{customerId}
+    </select>
+
+</mapper>

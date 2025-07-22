@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.CustomerMapper">
+
+    <!--通用查询映射结果-->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Customer">
+        <id column="id" property="id"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="customer_name" property="customerName"/>
+        <result column="customer_age" property="customerAge"/>
+        <result column="customer_sex" property="customerSex"/>
+        <result column="idcard" property="idcard"/>
+        <result column="room_no" property="roomNo"/>
+        <result column="building_no" property="buildingNo"/>
+        <result column="checkin_date" property="checkinDate"/>
+        <result column="expiration_date" property="expirationDate"/>
+        <result column="contact_tel" property="contactTel"/>
+        <result column="bed_id" property="bedId"/>
+        <result column="psychosomatic_state" property="psychosomaticState"/>
+        <result column="attention" property="attention"/>
+        <result column="birthday" property="birthday"/>
+        <result column="height" property="height"/>
+        <result column="weight" property="weight"/>
+        <result column="blood_type" property="bloodType"/>
+        <result column="filepath" property="filepath"/>
+        <result column="user_id" property="userId"/>
+        <result column="level_id" property="levelId"/>
+        <result column="family_member" property="familyMember"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id,is_deleted, customer_name, customer_age, customer_sex, idcard, room_no, building_no, checkin_date, expiration_date,contact_tel,bed_id,psychosomatic_state,attention,birthday,height,weight,blood_type,filepath,user_id,level_id,family_member
+    </sql>
+
+    <select id="selectPageVo" resultType="com.neusoft.yyzx.vo.KhxxCustomerVo">
+        SELECT
+        c.id,
+        c.is_deleted,
+        customer_name,
+        customer_age,
+        customer_sex,
+        idcard,
+        c.room_no,
+        building_no,
+        checkin_date,
+        expiration_date,
+        contact_tel,
+        c.bed_id,
+        psychosomatic_state,
+        attention,
+        birthday,
+        height,
+        weight,
+        blood_type,
+        filepath,
+        c.user_id,
+        c.level_id,
+        family_member,
+        n.level_name,
+        u.nickname,
+        b.bed_no
+        FROM
+        customer c
+        LEFT JOIN nurselevel n ON (c.level_id = n.id)
+        LEFT JOIN USER u ON (c.user_id = u.id)
+        LEFT JOIN bed b ON (c.bed_id = b.id)
+        <where>
+            <if test="manType!=null and manType==1">
+                and (select count(1) from customernurseitem cni where cni.customer_id=c.id and cni.is_deleted=0)=0
+            </if>
+            <if test="manType!=null and manType==2">
+                and (select count(1) from customernurseitem cni where cni.customer_id=c.id and cni.is_deleted=0)>0
+            </if>
+            <if test="customerName!=null and customerName!=''">
+                and customer_name like concat('%', #{customerName}, '%')
+            </if>
+            <if test="manType!=null and manType==3">
+                and user_id =-1
+            </if>
+            <if test="userId!=null">
+                and user_id =#{userId}
+            </if>
+            and c.is_deleted=0
+        </where>
+        order by c.id desc
+    </select>
+
+    <!-- 新增插入语句 -->
+    <insert id="insert" parameterType="com.neusoft.yyzx.pojo.Customer">
+        INSERT INTO customer (
+            is_deleted, customer_name, customer_age, customer_sex,
+            idcard, room_no, building_no, checkin_date, expiration_date,
+            contact_tel, bed_id, psychosomatic_state, birthday,
+            blood_type, filepath, user_id, family_member
+        ) VALUES (
+                     #{isDeleted}, #{customerName}, #{customerAge}, #{customerSex},
+                     #{idcard}, #{roomNo}, #{buildingNo}, #{checkinDate}, #{expirationDate},
+                     #{contactTel}, #{bedId}, #{psychosomaticState}, #{birthday},
+                     #{bloodType}, #{filepath}, #{userId}, #{familyMember}
+                 )
+    </insert>
+
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.MealMapper">
+
+    <!--通用查询映射结果-->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Meal">
+        <id column="id" property="id"/>
+        <result column="week_day" property="weekDay"/>
+        <result column="food_id" property="foodId"/>
+        <result column="meal_type" property="mealType"/>
+        <result column="taste" property="taste"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, week_day, food_id, meal_type, taste, is_deleted
+    </sql>
+
+    <select id="selectMealVo" resultType="MealVo">
+        SELECT
+        m.id,
+        m.week_day,
+        m.meal_type,
+        m.taste,
+        m.food_id,
+        f.food_name,
+        f.food_type,
+        f.price,
+        f.is_halal,
+        f.food_img
+        FROM
+        meal m
+        JOIN
+        food f ON (m.food_id = f.id)
+        <where>
+            m.is_deleted = 0
+            <if test="week_day != null and week_day != ''">
+                AND m.week_day = #{week_day}
+            </if>
+            <if test="meal_type != null and meal_type != ''">
+                AND m.meal_type = #{meal_type}
+            </if>
+        </where>
+    </select>
+
+</mapper>

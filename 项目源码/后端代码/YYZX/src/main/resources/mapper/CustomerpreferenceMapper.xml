@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.yyzx.mapper.CustomerpreferenceMapper">
+
+    <!--通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.neusoft.yyzx.pojo.Customerpreference">
+        <id column="id" property="id"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="preferences" property="preferences"/>
+        <result column="attention" property="attention"/>
+        <result column="remark" property="remark"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+    <!--通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, customer_id, preferences, attention, remark, is_deleted
+    </sql>
+
+    <select id="selectCustomerPreferenceVo" resultType="CustomerPreferenceVo">
+        SELECT
+        cp.id,
+        cp.customer_id,
+        c.customer_name,
+        c.customer_sex,
+        c.customer_age,
+        cp.preferences,
+        cp.attention,
+        cp.remark
+        FROM
+        customerpreference cp
+        JOIN
+        customer c
+        ON
+        cp.customer_id = c.id
+        <where>
+            cp.is_deleted = 0
+            <if test="customer_name != null and customer_name != ''">
+                AND c.customer_name = #{customer_name}
+            </if>
+        </where>
+    </select>
+
+</mapper>
